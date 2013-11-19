@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<!-- ************************************************************************
+
+   Wialon Apps - WEB applications, developed on the basis of SDK for Wialon Hosting and Wialon Kit.
+
+   http://apps.gurtam.com
+
+   Copyright:
+     2002-2013 Gurtam, http://gurtam.com
+
+   License:
+     LGPL: http://www.gnu.org/licenses/lgpl.html
+
+   Authors:
+     * Gurtam
+
+************************************************************************ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Messages Manager</title>
+		<link rel="icon" type="image/png" href="./img/favicon.ico">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta http-equiv="pragma" content="no-cache"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+		
+		<link rel="stylesheet" media="screen" type="text/css" href="./css/jquery-ui-1.10.0.custom.min.css"/>
+		<link rel="stylesheet" media="screen" type="text/css" href="./css/jquery-ui-timepicker-addon.css"/>
+		
+		<script type="text/javascript" src="./js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="./js/jquery-ui-1.10.0.custom.min.js"></script>
+		<script type="text/javascript" src="./js/jquery.activity-indicator-1.0.0.min.js"></script>
+
+		<script type="text/javascript" src="./js/jquery-ui-timepicker-addon.js"></script>
+		<script type="text/javascript" src="./js/jquery-ui-sliderAccess.js"></script>
+		<script type="text/javascript" src="./js/underscore-min.js"></script>
+		
+		<script type="text/javascript" src="./js/jquery.textbox.js"></script>
+		<script type="text/javascript" src="./js/sprintfWrapper.js"></script>
+		<script type="text/javascript" src="./js/jquery.localisation.js"></script>
+		<script type="text/javascript" src="./js/table.js"></script>
+		<script type="text/javascript" src="./js/main.js"></script>
+		<link rel="stylesheet" media="screen" type="text/css" href="./css/style.css"/>
+	</head>
+	<body
+		<!-- BEGIN: Underscore Template Definition. See: http://underscorejs.org/#template. -->
+		<script type="text/template" class="template" id="data_header">
+			<tr>
+				<th class="check-cell"><input type="checkbox" id="check_all" style="display:<%=display%>"/></th>
+				<th class="index-cell">&nbsp;</th>
+				<th><%=tm%></th>
+				<th><%=lon%></th>
+				<th><%=lat%></th>
+				<th><%=alt%></th>
+				<th><%=loc%></th>
+				<th><%=speed%></th>
+				<th><%=course%></th>
+				<th><%=scount%></th>
+				<th><%=io%></th>
+				<th><%=params%></th>
+			</tr>
+		</script>
+		<script type="text/template" class="template" id="data_row">
+			<tr id="msg_<%=id%>">
+				<td class="check-cell"><input id="msg_check_<%=id%>"  type="checkbox" style="display:<%=display%>" <%=disabled%>/></td>
+				<td class="index-cell"><span class="number"><%=index%>.</span></td>
+				<td style="min-width:145px;"><%=tm%></td>
+				<td style="min-width:82px;"><%=lon%></td>
+				<td style="min-width:82px;"><%=lat%></td>
+				<td style="min-width:80px;"><%=alt%></td>
+				<td style="min-width:200px;" class="location"><%=loc%></td>
+				<td style="min-width:105px;"><%=speed%></td>
+				<td style="min-width:70px;"><%=course%></td>
+				<td style="min-width:80px;"><%=scount%></td>
+				<td style="min-width:60px;"><%=idata%>/<%=odata%></td>
+				<td style="min-width:90px;" class="last-col"><%=params%></td>
+			</tr>
+		</script>
+		
+		<script type="text/template" class="template" id="sms_header">
+			<tr>
+				<th class="check-cell"><input type="checkbox" id="check_all" style="display:<%=display%>"/></th>
+				<th class="index-cell">&nbsp;</th>
+				<th><%=tm%></th>
+				<th><%=text%></th>
+				<th><%=phone%></th>
+			</tr>
+		</script>
+		<script type="text/template" class="template" id="sms_row">
+			<tr id="msg_<%=id%>">
+				<td class="check-cell"><input id="msg_check_<%=id%>"  type="checkbox" style="display:<%=display%>" <%=disabled%>/></td>
+				<td class="index-cell"><span class="number"><%=index%>.</span></td>
+				<td style="min-width:145px;"><%=tm%></td>
+				<td style="min-width:90px;"><%=text%></td>
+				<td style="min-width:82px;" class="last-col"><%=phone%></td>
+			</tr>
+		</script>
+		
+		<script type="text/template" class="template" id="command_header">
+			<tr>
+				<th class="check-cell"><input type="checkbox" id="check_all" style="display:<%=display%>"/></th>
+				<th class="index-cell">&nbsp;</th>
+				<th><%=tm%></th>
+				<th><%=cname%></th>
+				<th><%=ctype%></th>
+				<th><%=cparams%></th>
+				<th><%=user%></th>
+				<th><%=channel%></th>
+				<th><%=extime%></th>
+			</tr>
+		</script>
+		<script type="text/template" class="template" id="command_row">
+			<tr id="msg_<%=id%>">
+				<td class="check-cell"><input id="msg_check_<%=id%>"  type="checkbox" style="display:<%=display%>" <%=disabled%>/></td>
+				<td class="index-cell"><span class="number"><%=index%>.</span></td>
+				<td style="min-width:145px;"><%=tm%></td>
+				<td style="min-width:90px;"><%=cname%></td>
+				<td style="min-width:90px;"><%=ctype%></td>
+				<td style="min-width:150px;"><%=cparams%></td>
+				<td style="min-width:105px;" class="user"><%=user%></td>
+				<td style="min-width:65px;"><%=channel%></td>
+				<td style="min-width:145px;" class="last-col"><%=extime%></td>
+			</tr>
+		</script>
+		
+		<script type="text/template" class="template" id="event_header">
+			<tr>
+				<th class="check-cell"><input type="checkbox" id="check_all" style="display:<%=display%>"/></th>
+				<th class="index-cell">&nbsp;</th>
+				<th><%=tm%></th>
+				<th><%=type%></th>
+				<th><%=text%></th>
+				<th><%=lon%></th>
+				<th><%=lat%></th>
+				<th><%=params%></th>
+			</tr>
+		</script>
+		<script type="text/template" class="template" id="event_row">
+			<tr id="msg_<%=id%>">
+				<td class="check-cell"><input id="msg_check_<%=id%>"  type="checkbox" style="display:<%=display%>" <%=disabled%>/></td>
+				<td class="index-cell"><span class="number"><%=index%>.</span></td>
+				<td style="min-width:145px;"><%=tm%></td>
+				<td style="min-width:50px;"><%=type%></td>
+				<td style="min-width:140px;"><%=text%></td>
+				<td style="min-width:82px;"><%=lon%></td>
+				<td style="min-width:82px;"><%=lat%></td>
+				<td style="min-width:90px;" class="last-col"><%=params%></td>
+			</tr>
+		</script>
+		
+		
+		<!-- END: Underscore Template Definition. -->
+
+		<div id="header">
+			<img id="logo" src="./img/logo.png" alt="Messages editor" />
+			<div></div>
+		</div>
+
+		<div class="table-content">
+			<div id="data-inputs">
+				<span class="input-title" id="unit_title"></span>
+				<span><select class="input-select" id="units-select" style="width: 200px;"></select></span>
+				<span><img src="./img/par.png" id="unit_params"></img></span>
+				<span class="input-title" style="margin-left: 20px;" id="type_title"></span>
+				<span><select class="input-select" id="msg_type" style="width: 120px;"></select></span>
+				<span class="input-title" style="margin-left: 20px;" id="from_title"></span>
+				<span><input type="text" id="date-from"></span>
+				<span class="input-title" style="margin-left: 3px;" id="to_title"></span>
+				<span><input type="text" id="date-to"></span>
+				<span style="margin-left: 3px;"><input id="execute_btn" type="button" class="btn" disabled/></span>
+			</div>
+
+			<div class="separator"></div>
+			
+			<div id="header-wrap">
+				<table class="ptable">
+					<thead></thead>
+				</table>
+			</div>
+
+			<div id="table-wrap">
+				<table id="paginated-table" class="ptable"><tbody></tbody></table>
+			</div>
+		</div>
+		
+		<div class="table-footer">
+			<div id="table-instruments">
+				<div class="pgroup" style="margin-right:9px">
+					<input id="del_btn" type="button" class="btn" disabled/>
+				</div>
+				<div class="vseparator"></div>
+				
+				<span>
+					<select id="nrowonpage" class="input-select">
+						<option value="10">10</option>
+						<option value="25">25</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
+						<option value="500">500</option>
+						<option value="1000">1000</option>
+					</select>
+				</span>
+				<div class="vseparator"></div>
+				
+				<div id="top" class="pfirst pbtn">
+					<span></span>
+				</div>
+				
+				<div id="prev" class="pprev pbtn">
+					<span></span>
+				</div>
+				
+				<div class="pgroup">
+					<span class="pcontrol">
+						<table>
+							<tbody>
+								<tr>
+									<td style="vertical-align: middle;">
+										<b id="page" style="font-weight:normal;"></b>
+									</td>
+									<td style="vertical-align: middle; padding-left: 2px; padding-right: 2px;">
+										<input type="text" id="page_selector" size="4" value="1" alt="">
+									</td>
+									<td style="vertical-align: middle;">
+										<b id="of" style="font-weight:normal;"></b>
+										<span id="cpages">0</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</span>
+				</div>
+				
+				<div id="next" class="pnext pbtn">
+					<span></span>
+				</div>
+				
+				<div id="last" class="plast pbtn">
+					<span></span>
+				</div>
+				<div class="vseparator"></div>
+				
+				<div class="pgroup">
+					<div class="pgroup">
+						<table>
+							<tbody>
+								<tr>
+									<td style="vertical-align: middle; padding-left: 2px; padding-right: 2px;">
+										<span id="pagestat"></span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		
+		<div id="last_params">
+			<div>
+				<table id="params_table"></table>
+			</div>
+		</div>
+	</body>
+</html>

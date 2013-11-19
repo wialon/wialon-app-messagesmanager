@@ -1,0 +1,56 @@
+{
+	"name": "messages_manager",
+	"url_name": "messagesmanager",
+	"title": "Messages Manager",
+	"description": "Useful application when it comes to working with unit database.",
+	"author": {
+		"name": "",
+		"url": "http://gurtam.com"
+	},
+	"licenses": [
+		{
+			"type":" LGPL",
+			"url": "http://www.gnu.org/licenses/lgpl.html"
+		}
+	],
+	"dependencies": {
+		"jquery": "1.8.3",
+		"jquery.tooltip": "1.1",
+		"jquery.localisation": "1.1.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wialon/wialon-app-messagesmanager"
+	},
+	"modules": [
+		"SDK"
+	],
+	"params": [
+		"Active SID",
+		"Base URL",
+		"Host URL",
+		"Language",
+		"Current user"
+	],
+	"language": [
+		"en",
+		"ru"
+	],
+	"build_date": "2013-11-19",
+	"version": "1.2",
+	"keywords": [
+		"wialon",
+		"wialon-apps",
+		"messages"
+	],
+	"browser": {
+		"ie": "9+",
+		"opera": "10+",
+		"safari": "5+",
+		"chrome": "20+",
+		"firefox": "15+"
+	},
+	"logo": "logo.png",
+	"images_path": "images",
+	"desc_path": "desc"
+}
