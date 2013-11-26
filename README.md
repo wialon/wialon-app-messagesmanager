@@ -5,7 +5,7 @@ This is a web application based on Apps from Gurtam (http://apps.wialon.com).
 Messages Manager is a useful application when it comes to working with unit database. All types of messages (data, SMS, command, event) can be retrieved from the database and displayed in a handy tabular view. You only choose a unit and time interval. The application also enables you to delete improper messages from the database.
 
 ## License
-LGPL: http://www.gnu.org/licenses/lgpl.html
+[The MIT License](../master/LICENSE-MIT)
 
 ## Requirements
  * Browser: Google Chome 20+, Firefox 15+, Safari 5+, IE 9+, Opera 10+
