@@ -23,7 +23,7 @@
 		"url": "https://github.com/wialon/wialon-app-messagesmanager"
 	},
 	"modules": [
-		"SDK"
+		"sdk"
 	],
 	"params": [
 		"Active SID",
@@ -36,8 +36,9 @@
 		"en",
 		"ru"
 	],
-	"build_date": "2013-11-26",
-	"version": "1.2",
+	"build_date": "2014-05-12",
+	"release_date": "2013-08-06",
+	"version": "1.3",
 	"keywords": [
 		"wialon",
 		"wialon-apps",

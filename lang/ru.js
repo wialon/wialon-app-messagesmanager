@@ -1,8 +1,6 @@
 TRANSLATIONS = {
 	"Displaying %s to %s of %s messages": "Отображается с %s по %s из %s сообщений",
-	
-	"Messages Manager": "Менеджер сообщений",
-	
+
 	"Unit": "Объект",
 	
 	"Type": "Тип",
@@ -33,17 +31,25 @@ TRANSLATIONS = {
 	
 	"Altitude, m": "Высота, м",
 	
+	"Altitude, ft": "Высота, фт",
+	
 	"Altitude": "Высота",
 	
 	"m": "м",
+	
+	"ft": "фт",
 	
 	"Location": "Местоположение",
 	
 	"Speed, km/h": "Скорость, км/ч",
 	
+	"Speed, mph": "Скорость, ми/ч",
+	
 	"Speed": "Скорость",
 	
 	"km/h": "км/ч",
+	
+	"mph": "ми/ч",
 	
 	"Course": "Курс",
 	
@@ -151,5 +157,50 @@ TRANSLATIONS = {
 	
 	"Mileage counter value was changed from %d km to %d km.": "Значение счетчика пробега изменено с %d км на %d км.",
 	
-	"Mileage counter value is %d km.": "Значение счетчика пробега - %d км."
+	"Mileage counter value was changed from %d mi to %d mi.": "Значение счетчика пробега изменено с %d ми на %d ми.",
+	
+	"Mileage counter value is %d km.": "Значение счетчика пробега - %d км.",
+	
+	"Mileage counter value is %d mi.": "Значение счетчика пробега - %d ми.",
+
+    "Sunday": "Воскресенье",
+    "Monday": "Понедельник",
+    "Tuesday": "Вторник",
+    "Wednesday": "Среда",
+    "Thursday": "Четверг",
+    "Friday": "Пятница",
+    "Saturday": "Суббота",
+
+    "January": "Январь",
+    "February": "Февраль",
+    "March": "Март",
+    "April": "Апрель",
+    "May": "Май",
+    "June": "Июнь",
+    "July": "Июль",
+    "August": "Август",
+    "September": "Сентябрь",
+    "October": "Октябрь",
+    "November": "Ноябрь",
+    "December": "Декабрь",
+
+    "Sun": "Вс",
+    "Mon": "Пн",
+    "Tue": "Вт",
+    "Wed": "Ср",
+    "Thu": "Чт",
+    "Fri": "Пт",
+    "Sat": "Сб",
+
+    "Jan": "Янв",
+    "Feb": "Фев",
+    "Mar": "Мар",
+    "Apr": "Апр",
+    "Jun": "Июн",
+    "Jul": "Июл",
+    "Aug": "Авг",
+    "Sep": "Сен",
+    "Oct": "Окт",
+    "Nov": "Ноя",
+    "Dec": "Дек"
 };

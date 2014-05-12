@@ -1,8 +1,6 @@
 TRANSLATIONS = {
 	"Displaying %s to %s of %s messages": "",
 	
-	"Messages Manager": "",
-	
 	"Unit": "",
 	
 	"Type": "",
@@ -37,13 +35,19 @@ TRANSLATIONS = {
 	
 	"m": "",
 	
+	"ft": "",
+	
 	"Location": "",
 	
 	"Speed, km/h": "",
 	
+	"Speed, mph": "",
+	
 	"Speed": "",
 	
 	"km/h": "",
+	
+	"mph": "",
 	
 	"Course": "",
 	
@@ -151,5 +155,50 @@ TRANSLATIONS = {
 	
 	"Mileage counter value was changed from %d km to %d km.": "",
 	
-	"Mileage counter value is %d km.": ""
+	"Mileage counter value was changed from %d mi to %d mi.": "",
+	
+	"Mileage counter value is %d km.": "",
+	
+	"Mileage counter value is %d mi.": "",
+
+    "Sunday": "",
+    "Monday": "",
+    "Tuesday": "",
+    "Wednesday": "",
+    "Thursday": "",
+    "Friday": "",
+    "Saturday": "",
+
+    "January": "",
+    "February": "",
+    "March": "",
+    "April": "",
+    "May": "",
+    "June": "",
+    "July": "",
+    "August": "",
+    "September": "",
+    "October": "",
+    "November": "",
+    "December": "",
+
+    "Sun": "",
+    "Mon": "",
+    "Tue": "",
+    "Wed": "",
+    "Thu": "",
+    "Fri": "",
+    "Sat": "",
+
+    "Jan": "",
+    "Feb": "",
+    "Mar": "",
+    "Apr": "",
+    "Jun": "",
+    "Jul": "",
+    "Aug": "",
+    "Sep": "",
+    "Oct": "",
+    "Nov": "",
+    "Dec": ""
 };

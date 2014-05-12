@@ -1,4 +1,4 @@
-# Messages Manager, version 1.2: (August 6, 2013)
+# Messages Manager, version 1.3: (May 12, 2014)
 This is a web application based on Apps from Gurtam (http://apps.wialon.com).
 
 ## Description
@@ -24,4 +24,10 @@ Working with applications in the GPS tracking system: http://docs.gurtam.com/en/
  * v1.2 (August 6, 2013)  
 - Fixed browser crush while trying to download messages for long interval
 - Added an opportunity to show messages by parts of 500 and 1000
+
+ * v1.3 (May 12, 2014) 
+- Added US metrics support
+- Added time mask support
+- Fixed GIS geocoding location address format
+- Fixed altitude & speed printing for no data case
 

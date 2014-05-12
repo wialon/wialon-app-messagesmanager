@@ -23,9 +23,9 @@ $.datepicker.regional["ru"] = {
 	"Июл","Авг","Сен","Окт","Ноя","Дек"], 
 	dayNames: ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"], 
 	dayNamesShort: ["вск","пнд","втр","срд","чтв","птн","сбт"], 
-	dayNamesMin: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"], 
-	dateFormat: "dd MM yy", 
-	firstDay: 1,
+	dayNamesMin: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+	//dateFormat: "dd MM yy",
+	//firstDay: 1,
 	timeSuffix: "",
 	timeOnlyTitle: "Выберите время",
 	timeText: "Время",
@@ -55,7 +55,7 @@ function execCallback(id) {
 	/// Current times [time_from, time_to]
 	var ctimes = null;	
 	/// Time format
-	var enFormatTime = "HH:mm:ss&nbsp;&nbsp;dd.MM.Y";
+	var enFormatTime = '';
 	/// Locations cache
 	var locationsData = {};
 	/// Timer for detecting locations request
@@ -153,11 +153,26 @@ function execCallback(id) {
 		var specUnit = {itemsType: "avl_unit", propName: "sys_name", propValueMask: "*", sortType: "sys_name"};
 		var flagsUnit = wialon.item.Item.dataFlag.base | wialon.item.Unit.dataFlag.lastMessage;
 		wialon.core.Session.getInstance().searchItems(specUnit, true, flagsUnit, 0, 0, function (code, data) {
-			$("#table-wrap").activity(false);
-			if (code || !data || !data.items || !data.items.length) 
-				return;	
-			fillUnitsSelect(data.items);
-			$("#execute_btn").removeAttr("disabled");
+
+            // get string of time format
+            wialon.core.Session.getInstance().getCurrUser().getLocale(function(arg, locale){
+
+	            var fd = (locale && locale.fd) ? locale.fd : '%Y-%m-%E_%H:%M:%S'; // check for users who have never changed the parameters of the metric
+
+	            enFormatTime = wialon.util.DateTime.convertFormat(fd,true).replace(/_/, '&nbsp;&nbsp;').replace(/ /, '&nbsp;');
+	            setLocaleDateTime();
+
+                $("#table-wrap").activity(false);
+                if (code || !data || !data.items || !data.items.length)
+                    return;
+                fillUnitsSelect(data.items);
+                $("#execute_btn").removeAttr("disabled");
+                
+                initDatepicker(
+                	(locale && locale.wd && locale.wd > 1) ? 0 : 1,
+                	fd
+                );
+            });
 		});
 		
 	}
@@ -236,9 +251,9 @@ function execCallback(id) {
 						tm: $.localise.tr("Time"),
 						lon: $.localise.tr("Longitude"),
 						lat: $.localise.tr("Latitude"),
-						alt: $.localise.tr("Altitude, m"),
+						alt: (getMeasureUnits(cunit)) ? $.localise.tr("Altitude, ft") : $.localise.tr("Altitude, m"),
 						loc: $.localise.tr("Location"),
-						speed: $.localise.tr("Speed, km/h"),
+						speed: (getMeasureUnits(cunit)) ? $.localise.tr("Speed, mph") : $.localise.tr("Speed, km/h"),
 						course: $.localise.tr("Course"),
 						scount: $.localise.tr("Satellites"),
 						io: $.localise.tr("I/O"),
@@ -446,8 +461,8 @@ function execCallback(id) {
 		var defValue = "---";
 		var lon = msg.pos ? msg.pos.x : defValue;
 		var lat = msg.pos ? msg.pos.y : defValue;
-		var speed = msg.pos ? msg.pos.s : defValue;
-		var alt = msg.pos ? msg.pos.z : defValue;
+		var speed = msg.pos ? (getMeasureUnits(cunit)) ? Math.round(msg.pos.s / 1.609344) : msg.pos.s : defValue;
+		var alt = msg.pos ? (getMeasureUnits(cunit)) ? Math.round(msg.pos.z / 0.3048) : msg.pos.z : defValue;
 		var course = msg.pos ? msg.pos.c : defValue;
 		var scount = msg.pos ? msg.pos.sc : defValue;
 		var loc = defValue;
@@ -599,7 +614,7 @@ function execCallback(id) {
 			type = $.localise.tr("Filling");
 		else if (msg.f & 0x1)
 			type = $.localise.tr("Violation");
-		var text = getEventText(msg);
+		var text = getEventText(msg, cunit);
 		var defValue = "---";	
 		var lon = msg.x ? msg.x : defValue;
 		var lat = msg.y ? msg.y : defValue;
@@ -629,7 +644,7 @@ function execCallback(id) {
 	}
 	
 	// Get event text - parse its patameters
-	function getEventText(msg) {
+	function getEventText(msg, unit) {
 		if (!msg)
 			return "---";
 		
@@ -675,9 +690,9 @@ function execCallback(id) {
 			else if (typeof msg.p.mileage != "undefined") {
 				if (parseInt(msg.p.reset_mileage)) {
 					if (typeof msg.p.new_mileage != "undefined")
-						return sprintf($.localise.tr("Mileage counter value was changed from %d km to %d km."), parseInt(msg.p.mileage / 1000), parseInt(msg.p.new_mileage / 1000));
+						return sprintf( ((getMeasureUnits(unit))? $.localise.tr("Mileage counter value was changed from %d mi to %d mi.") : $.localise.tr("Mileage counter value was changed from %d km to %d km.")), parseInt(msg.p.mileage / 1000), parseInt(msg.p.new_mileage / 1000));
 				} else
-					return sprintf($.localise.tr("Mileage counter value is %d km."), parseInt(msg.p.mileage / 1000));
+					return sprintf( ((getMeasureUnits(unit))? $.localise.tr("Mileage counter value is %d mi.") : $.localise.tr("Mileage counter value is %d km.")), parseInt(msg.p.mileage / 1000));
 			}
 		}
 		return msg.et;
@@ -761,6 +776,23 @@ function execCallback(id) {
 			}));
 		}
 	}
+	/// get Measure Units
+	function getMeasureUnits (unit) {
+	    var metric = unit.getMeasureUnits();
+	    metric = (metric) ? metric : 0; // check for users who have never changed the parameters of the metric
+	    return metric;
+	}
+	/// get string of time format
+	function getTimeFormat() {
+		var s = wialon.core.Session.getInstance();
+		var currentUser = s.getCurrUser();
+		var tf = '';
+		currentUser.getLocale(function(code, locale){
+			tf = wialon.util.DateTime.convertFormat(locale.fd, true).replace('_', ' ');
+		});
+
+		return '';
+	}
 	/// A function to execute after the DOM is ready.
 	$(document).ready(function () {
 		disabletableui();
@@ -777,44 +809,42 @@ function execCallback(id) {
 		if ((!lang) || ($.inArray(lang, ["en", "ru"]) == -1))
 			lang = "en";
 		$.localise('lang/', {language: lang});
-		initControls();	
+		initControls();
 		
 		loadScript(url, initSdk);
 	});
 	
 	/// Fill controls with values
 	function initControls () {
-		$("#header div").html($.localise.tr("Messages Manager"));
-		
 		var resize = function(){
 			$("#paginated-table").width("100%");
 			$("#table-wrap").width("100%");
 			$(".table-content").width("100%");
-			
+
 			setTimeout(function() {
 				var tableW = $("#paginated-table").width();
 				var wrapperW = $("#table-wrap").width();
 				var width = tableW>wrapperW ? tableW : wrapperW;
-				
+
 				$("#header").width(width-17);
 				$(".table-content").width(width);
 				$(".table-footer").width(width);
-				
+
 				var tblHeight = $(window).outerHeight()-$("#header").outerHeight()-$("#data-inputs").outerHeight()-$(".table-footer").outerHeight()-$("#header-wrap").outerHeight()-1;
 				$("#table-wrap").height(tblHeight);
-				
+
 				if(resizeTimer)
 					return;
 				resizeTimer = setTimeout(function(){
 					$("#paginated-table tr:eq(0) td").each(function(){
 						$(this).triggerHandler("resize");
 					});
-				},100);	
+				},100);
 			}, 200);
 		};
 		resize();
 		$(window).resize(resize);
-		
+
 		$("#unit_title").html($.localise.tr("Unit"));
 		$("#type_title").html($.localise.tr("Type"));
 		$("#from_title").html($.localise.tr("From"));
@@ -828,72 +858,190 @@ function execCallback(id) {
 		$("#msg_type").append("<option value='0x200'>"+$.localise.tr("Command")+"</option>");
 		$("#msg_type").append("<option value='0x600'>"+$.localise.tr("Event")+"</option>");
 		$("#unit_params").click(showLastParams);
-		
+
 		$("#table-wrap").scroll(function(){
 			$("#header-wrap").scrollLeft($(this).scrollLeft());
-		});		
-				
+		});
+
 		var lang = getHtmlParameter("lang");
 		if ((!lang) || ($.inArray(lang, ["en", "ru"]) == -1))
 			lang = "en";
-		
+
 		$.datepicker.setDefaults($.datepicker.regional[lang]);
 		$.timepicker.setDefaults($.datepicker.regional[lang]);
 
-		$("#date-from").datetimepicker();
-		$("#date-to").datetimepicker();	
-		
-		var temp = new Date();
-		temp.setHours(0);
-		temp.setMinutes(0);
-		$("#date-from").datetimepicker("setDate", temp);
-		temp.setHours(23);
-		temp.setMinutes(59);
-		$("#date-to").datetimepicker("setDate", temp);
+        $("#execute_btn").click(execute);
+        $("#nrowonpage").change(changeRowOnPage);
+        $("#page_selector").keypress(changePage);
 
-		$("#execute_btn").click(execute);
-		$("#nrowonpage").change(changeRowOnPage);
-		$("#page_selector").keypress(changePage);
-		
-		$("#del_btn").click(onDelete);
+        $("#del_btn").click(onDelete);
 
-		$("#units-select").change(function() {
-			disabletableui();
-			
-			var spec = [{
-				type: "id",
-				data: this.value,
-				flags: wialon.item.Item.dataFlag.base|wialon.item.Unit.dataFlag.lastMessage|wialon.item.Unit.dataFlag.messageParams,
-				mode: 0 
-			}];
-			wialon.core.Session.getInstance().updateDataFlags(spec, function(code) {
-				if (code)
-					return;
-				
-				cunit = wialon.core.Session.getInstance().getItem($("#units-select").val());
-				
-				var lmsgTime = cunit.getLastMessage() ? cunit.getLastMessage().t : "";
-				if(lmsgTime) 
-					lmsgTime = new Date(parseInt(lmsgTime)*1000);
-				else
-					lmsgTime = new Date();
-				lmsgTime.setHours(0);
-				lmsgTime.setMinutes(0);
-				$("#date-from").datetimepicker("setDate", lmsgTime);
-				lmsgTime.setHours(23);
-				lmsgTime.setMinutes(59);
-				$("#date-to").datetimepicker("setDate", lmsgTime);
-			});
-		});
-		
+        $("#units-select").change(function() {
+            disabletableui();
+
+            var spec = [{
+                type: "id",
+                data: this.value,
+                flags: wialon.item.Item.dataFlag.base|wialon.item.Unit.dataFlag.lastMessage|wialon.item.Unit.dataFlag.messageParams,
+                mode: 0
+            }];
+            wialon.core.Session.getInstance().updateDataFlags(spec, function(code) {
+                if (code)
+                    return;
+
+                // get & set address format for GIS geocoding
+                var address_format = wialon.core.Session.getInstance().getCurrUser().getCustomProperty("us_addr_fmt", "");
+                if (address_format) {
+                	var addr_fmt = address_format.split("_");
+                	if (addr_fmt)
+                		wialon.util.Gis.geocodingParams = {flags: addr_fmt[0], city_radius: addr_fmt[1], dist_from_unit: addr_fmt[2]};
+                }
+
+                cunit = wialon.core.Session.getInstance().getItem($("#units-select").val());
+
+                var lmsgTime = cunit.getLastMessage() ? cunit.getLastMessage().t : "";
+                if(lmsgTime)
+                    lmsgTime = new Date(parseInt(lmsgTime)*1000);
+                else
+                    lmsgTime = new Date();
+                lmsgTime.setHours(0);
+                lmsgTime.setMinutes(0);
+                $("#date-from").datetimepicker("setDate", lmsgTime);
+                lmsgTime.setHours(23);
+                lmsgTime.setMinutes(59);
+                $("#date-to").datetimepicker("setDate", lmsgTime);
+            });
+        });
+
 		$("#last_params").click(function(){
 			$(this).hide();
 		});
-		
+
 		$("#last_params div").click(function(e){
 			e.stopPropagation();
 		});
 	}
+
+    /// init initDatepicker
+    function initDatepicker(firstDay, dateFormat) {
+    	/**
+	    	var set = {
+	    		firstDay: 1 || 0,
+	    		dateFormat: "dd MM yy"
+	    	}
+    	*/
+
+    	var settings = {
+    		firstDay: firstDay
+    	};
+
+        var d  = dateFormat.split('_')[0];
+        var df = getAdaptedDateFormat( d );
+        if ( df ) {
+            settings.dateFormat = df;
+//            $.datepicker._defaults.dateFormat = df;
+        }
+
+        var t  = dateFormat.split('_')[1];
+        var tf = getAdaptedDateFormat( t );
+        if ( tf ) {
+            settings.timeFormat = tf;
+//            $.timepicker._defaults.timeFormat = "hh:mm a"
+//            $.timepicker._defaults.timeFormat = "h:mm TT"
+        }
+
+        $("#date-from").datetimepicker( settings );
+        $("#date-to").datetimepicker( settings );
+
+        var temp = new Date();
+        temp.setHours(0);
+        temp.setMinutes(0);
+        $("#date-from").datetimepicker("setDate", temp);
+        temp.setHours(23);
+        temp.setMinutes(59);
+        $("#date-to").datetimepicker("setDate", temp);
+    }
+
+    /// adapter dateFormat for datetimepicker
+    function getAdaptedDateFormat(date){
+        var flagY = true;
+        var flagM = true;
+        var flagD = true;
+        var res = '';
+        // use method for assemble string
+    	date.replace(/(%\w)|_|%%/g, function(str){
+
+            switch (str) {
+                case "%Y": { // yy - year (four digit)
+                    if (flagY) {
+                        res += ' yy';
+                        flagY = false
+                    }
+                    break;
+                }
+                case "%y": { // y - year (two digit)
+                    if (flagY) {
+                        res += ' y';
+                        flagY = false
+                    }
+                    break;
+                }
+                // month
+                case "%B": //return 'MM';   // MM - month name long
+                case "%b": //return 'M';    // M - month name short
+                case "%m": //return 'mm';   // mm - month of year (two digit)
+                case "%l": { //return 'm';    // m - month of year (no leading zero)
+                    if (flagM) {
+                        res += ' MM';
+                        flagM = false
+                    }
+                    break;
+                }
+                // day
+                case "%A": //return 'DD';   // DD - day name long
+                case "%a": //return 'D';    // D - day name short
+                case "%E": { // dd - day of month (two digit)
+                    if (flagD) {
+                        res += ' dd';
+                        flagD = false
+                    }
+                    break;
+                }
+                case "%e": { // d - day of month (no leading zero)
+                    if (flagD) {
+                        res += ' d';
+                        flagD = false
+                    }
+                    break;
+                }
+
+                // for time format:
+                case "%H": { // 24h
+                    res += ' HH';
+                    break;
+                }
+                case "%I": { // 12h
+                    res += ' hh';
+                    break;
+                }
+                case "%p": { // AM/PM
+                    res += ' TT';
+                    break;
+                }
+                case "%M": {
+//                    var start  = ( date.indexOf('%H') > 0 ) ? date.indexOf('%H') + 2 : date.indexOf('%I') + 2;  // 2 = '%H'.length
+//                    var end = date.indexOf('%M');
+//                    var sep = (date.slice(start, end)) ? date.slice(start, end) : ':';
+//                    res += sep +'mm';
+                    res += ':mm';
+                    break;
+                }
+                default: break;
+            }
+        });
+        res = res.replace(/^ /,''); // remove first space
+    	return res;
+    }
 	
 	/// Show latest arameters
 	function showLastParams() {
@@ -932,12 +1080,17 @@ function execCallback(id) {
 			if (lastParams["posinfo"]) {
 				addRow($.localise.tr("Longitude"), lastParams["posinfo"].v.x);
 				addRow($.localise.tr("Latitude"), lastParams["posinfo"].v.y);
-				addRow($.localise.tr("Altitude"), lastParams["posinfo"].v.z + " " + $.localise.tr("m"));
+				addRow(
+					$.localise.tr("Altitude"),
+					lastParams["posinfo"].v.z
+						? ( (getMeasureUnits(item)) ? (lastParams["posinfo"].v.z * 3.281) : lastParams["posinfo"].v.z ) + " " + ( (getMeasureUnits(item)) ? ($.localise.tr("ft")) : $.localise.tr("m"))
+						: '---'
+				);
 				addRow($.localise.tr("Course"), lastParams["posinfo"].v.c);
 				addRow($.localise.tr("Satellites"), lastParams["posinfo"].v.sc);
 			}
 			if(lastParams["speed"])
-				addRow($.localise.tr("Speed"), lastParams["speed"].v + " " + $.localise.tr("km/h"));
+				addRow($.localise.tr("Speed"), ( (getMeasureUnits(item)) ? ( Math.round(lastParams["speed"].v / 1.609344) ) : lastParams["speed"].v ) + " " + ( (getMeasureUnits(item)) ? $.localise.tr("mph") : $.localise.tr("km/h") ));
 			var idata = "-";
 			if (lastParams["in"] && (lastParams["in"].v || lastParams["in"].v === 0) )
 				idata = lastParams["in"].v.toString(16);
@@ -1023,6 +1176,57 @@ function execCallback(id) {
 	/// Callback for detecting location
 	function updateLocationCallback(id, location) {
 		$("#msg_"+id+" .location").html(location);
+	}
+
+	/// set Locale Date Time
+	function setLocaleDateTime () {
+	    var days = [
+	            $.localise.tr("Sunday"),
+	            $.localise.tr("Monday"),
+	            $.localise.tr("Tuesday"),
+	            $.localise.tr("Wednesday"),
+	            $.localise.tr("Thursday"),
+	            $.localise.tr("Friday"),
+	            $.localise.tr("Saturday")
+	        ],
+	        months = [
+	            $.localise.tr("January"),
+	            $.localise.tr("February"),
+	            $.localise.tr("March"),
+	            $.localise.tr("April"),
+	            $.localise.tr("May"),
+	            $.localise.tr("June"),
+	            $.localise.tr("July"),
+	            $.localise.tr("August"),
+	            $.localise.tr("September"),
+	            $.localise.tr("October"),
+	            $.localise.tr("November"),
+	            $.localise.tr("December")
+	        ],
+	        days_abbrev = [
+	            $.localise.tr("Sun"),
+	            $.localise.tr("Mon"),
+	            $.localise.tr("Tue"),
+	            $.localise.tr("Wed"),
+	            $.localise.tr("Thu"),
+	            $.localise.tr("Fri"),
+	            $.localise.tr("Sat")
+	        ],
+	        months_abbrev = [
+	            $.localise.tr("Jan"),
+	            $.localise.tr("Feb"),
+	            $.localise.tr("Mar"),
+	            $.localise.tr("Apr"),
+	            $.localise.tr("May"),
+	            $.localise.tr("Jun"),
+	            $.localise.tr("Jul"),
+	            $.localise.tr("Aug"),
+	            $.localise.tr("Sep"),
+	            $.localise.tr("Oct"),
+	            $.localise.tr("Nov"),
+	            $.localise.tr("Dec")
+	        ];
+	    wialon.util.DateTime.setLocale(days, months, days_abbrev, months_abbrev);
 	}
 	
 }) ( jQuery , _);
