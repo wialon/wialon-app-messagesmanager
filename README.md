@@ -1,4 +1,4 @@
-# Messages Manager, version 1.3: (May 12, 2014)
+# Messages Manager, version 1.4: (March 31, 2015)
 This is a web application based on Apps from Gurtam (http://apps.wialon.com).
 
 ## Description
@@ -8,13 +8,13 @@ Messages Manager is a useful application when it comes to working with unit data
 [The MIT License](../master/LICENSE-MIT)
 
 ## Requirements
- * Browser: Google Chome 20+, Firefox 15+, Safari 5+, IE 9+, Opera 10+
+ * Browser: Google Chome 20+, Firefox 15+, Safari 5+, IE 9+, Opera 12+
  * Language: русский, English
  * Components: SDK
  * URL params: Active SID, Host URL, Base URL, Language, Current user
 
 ## Quick start
-Apps activation through the management system: http://docs.gurtam.com/en/hosting/cms/apps/apps  
+Apps activation through the management system: http://docs.gurtam.com/en/hosting/cms/apps/apps
 Working with applications in the GPS tracking system: http://docs.gurtam.com/en/hosting/user/apps/apps
 
 ## Release History
@@ -31,3 +31,6 @@ Working with applications in the GPS tracking system: http://docs.gurtam.com/en/
 - Fixed GIS geocoding location address format
 - Fixed altitude & speed printing for no data case
 
+ * v1.4 (March 31, 2015) 
+- Added filtration dialog
+- Added sorting by columns
