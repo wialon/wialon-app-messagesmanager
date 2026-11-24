@@ -1,58 +1,62 @@
 {
-	"name": "messages_manager",
-	"url_name": "messagesmanager",
-	"title": "Messages Manager",
-	"description": "Useful application when it comes to working with unit database.",
-	"author": {
-		"name": "",
-		"url": "http://gurtam.com"
-	},
-	"licenses": [
-		{
-			"type":" MIT",
-			"url": "https://github.com/wialon/wialon-app-messagesmanager/blob/master/LICENSE-MIT"
-		}
-	],
-	"dependencies": {
-		"jquery": "1.8.3",
-		"jquery.tooltip": "1.1",
-		"jquery.localisation": "1.1.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/wialon/wialon-app-messagesmanager"
-	},
-	"modules": [
-		"sdk"
-	],
-	"params": [
-		"Active SID",
-		"Base URL",
-		"Host URL",
-		"Language",
-		"Current user"
-	],
-	"docs": {},
-	"language": [
-		"en",
-		"ru"
-	],
-	"build_date": "2015-03-31",
-	"release_date": "2013-08-06",
-	"version": "1.4",
-	"keywords": [
-		"wialon",
-		"wialon-apps",
-		"messages"
-	],
-	"browser": {
-		"ie": "9+",
-		"opera": "12+",
-		"safari": "5+",
-		"chrome": "20+",
-		"firefox": "15+"
-	},
-	"logo": "logo.png",
-	"images_path": "images",
-	"desc_path": "desc"
+    "deprecated": true,
+    "name": "messages_manager",
+    "url_name": "messagesmanager",
+    "title": "Messages Manager",
+    "description": "Useful application when it comes to working with unit database.",
+    "author": {
+        "name": "",
+        "url": "http://gurtam.com"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/wialon/wialon-app-messagesmanager/blob/master/LICENSE-MIT"
+        }
+    ],
+    "dependencies": {
+        "jquery": "1.8.3",
+        "jquery.tooltip": "1.1",
+        "jquery.localisation": "1.1.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wialon/wialon-app-messagesmanager"
+    },
+    "modules": [
+        "sdk"
+    ],
+    "params": [
+        "Active SID",
+        "Base URL",
+        "Host URL",
+        "Language",
+        "Current user"
+    ],
+    "docs": [],
+    "language": [
+        "en",
+        "br",
+        "es",
+        "fa",
+        "pl",
+        "ru"
+    ],
+    "build_date": "2026-11-20",
+    "release_date": "2013-08-06",
+    "version": "1.4.1",
+    "keywords": [
+        "wialon",
+        "wialon-apps",
+        "messages"
+    ],
+    "browser": {
+        "ie": "9+",
+        "opera": "12+",
+        "safari": "5+",
+        "chrome": "20+",
+        "firefox": "15+"
+    },
+    "logo": "logo.png",
+    "desc_path": "desc"
 }

@@ -1,53 +1,46 @@
 <!DOCTYPE html>
-<!-- ************************************************************************
-
-	 Wialon Apps - WEB applications, developed on the basis of SDK for Wialon Hosting and Wialon Kit.
-
-	 http://apps.gurtam.com
-
-	 Copyright:
-		 2002-2013 Gurtam, http://gurtam.com
-
-	 License:
-		 MIT: https://github.com/wialon/wialon-app-messagesmanager/blob/master/LICENSE-MIT
-
-	 Authors:
-		 * Gurtam
-
-************************************************************************ -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Messages Manager</title>
-		<link rel="icon" type="image/png" href="./img/favicon.ico">
+		<title></title>
+		<link rel="icon" type="image/png" href="./img/favicon.png">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta http-equiv="pragma" content="no-cache"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 		<meta name="apple-mobile-web-app-capable" content="yes"/>
-		<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
 		<link rel="stylesheet" media="screen" type="text/css" href="./css/jquery-ui-1.10.0.custom.min.css"/>
-		<!-- <link rel="stylesheet" media="screen" type="text/css" href="./css/jquery-ui-timepicker-addon.css"/> -->
 
 
 		<script type="text/javascript" src="./js/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="./js/jquery-ui-1.10.0.custom.min.js"></script>
-		<!-- <script type="text/javascript" src="./js/jquery.activity-indicator-1.0.0.min.js"></script> -->
 
 		<script type="text/javascript" src="./js/underi18n.js"></script>
-		<!-- <script type="text/javascript" src="./js/jquery-ui-timepicker-addon.js"></script> -->
 		<script type="text/javascript" src="./js/jquery-ui-sliderAccess.js"></script>
 		<script type="text/javascript" src="./js/underscore-min.js"></script>
 
 		<script type="text/javascript" src="./js/jquery.textbox.js"></script>
-		<script type="text/javascript" src="./js/sprintfWrapper.js"></script>
+		<script type="text/javascript" src="./js/sprintf.js"></script>
 		<script type="text/javascript" src="./js/jquery.localisation.js"></script>
 		<script type="text/javascript" src="./js/table.js"></script>
-		<script src="/plugins/wialon/interval/interval.wialon.min.js"></script>
-		<script type="text/javascript" src="./js/script.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="/plugins/wialon/interval/interval.wialon.min.css"/>
-		<link rel="stylesheet" media="screen" type="text/css" href="./css/style.min.css"/>
+		<script src="//apps.wialon.com/plugins/wialon/interval/interval.wialon.min.js"></script>
+		<script type="text/javascript" src="./js/main.js"></script>
+		<link rel="stylesheet" type="text/css" href="//apps.wialon.com/plugins/wialon/interval/interval.wialon.min.css"/>
+		<link rel="stylesheet" media="screen" type="text/css" href="./css/style.css"/>
+		<script>
+			var availableLanguages=null;
+			var documentationLink=null;
+			var is_white=null;
+			var APP_CONFIG = {};
+			function appPredefineVariables(app_langs,doc_link,is_whitelabeled,config){
+				availableLanguages=app_langs;
+				documentationLink=is_whitelabeled?(config.help_url_link ? decodeURIComponent(config.help_url_link) : null):doc_link;
+				is_white=is_whitelabeled;
+				APP_CONFIG=config;
+			}
+		</script>
 	</head>
-	<body
+	<body>
 		<!-- BEGIN: Underscore Template Definition. See: http://underscorejs.org/#template. -->
 		<script type="text/template" class="template" id="data_header">
 			<tr>
@@ -186,8 +179,8 @@
 		<!-- END: Underscore Template Definition. -->
 
 		<div id="header">
-			<img id="logo" src="./img/logo.png" alt="Messages editor" />
-			<div id="app_name">Messages Manager</div>
+			<img id="logo" src="./img/logo.svg" alt="Messages editor" />
+			<div id="app_name"></div>
 			<div id="help"></div>
 			<div class="clear"></div>
 		</div>

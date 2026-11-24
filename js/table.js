@@ -1,5 +1,6 @@
 (function( $ ) {
-	$.fn.dividedByPages = function (data, renders) {
+	$.fn.dividedByPages = function (data, renders, changePageHandler) {
+		changePageHandler = changePageHandler || function (){};
 		var maxRows = parseInt($("#nrowonpage").val());
 
 		var cData = data;
@@ -26,6 +27,7 @@
 			var count = getCountPages();
 			if ($.isNumeric(npage) && (npage > 0) && (npage <= count)) {
 				cPage = page + 1;
+				changePageHandler(cPage);
 				prev(null, true);
                 renderList(cPage);
 			} else {
@@ -149,6 +151,8 @@
 				cPage = prevPage;
 			}
 
+			changePageHandler(cPage);
+
 			var count = getCountPages();
 			if (prevPage < count) {
 				cNext.removeClass('disabled');
@@ -181,6 +185,8 @@
 			cStart.removeClass('disabled');
 			cPage = nextPage;
 
+			changePageHandler(cPage);
+
 			added(ndata, sindex);
 			return false;
 		}
@@ -200,6 +206,8 @@
 				cPage--;
 			}
 
+			changePageHandler(cPage);
+
 			cNext.addClass('disabled');
 			cPrev.removeClass('disabled');
 			cEnd.addClass('disabled');
@@ -216,6 +224,7 @@
 				return false;
 
 			cPage = 1;
+			changePageHandler(cPage);
 			cNext.removeClass('disabled');
 			cPrev.addClass('disabled');
 			cEnd.removeClass('disabled');

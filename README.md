@@ -1,36 +1,26 @@
-# Messages Manager, version 1.4: (March 31, 2015)
-This is a web application based on Apps from Gurtam (http://apps.wialon.com).
+# Messages Manager, version 1.4.1: (November 24, 2026)
+This is WEB application based on Apps from Gurtam (http://apps.wialon.com).
+
+**This is a legacy app: it is no longer developed or maintained. The code is published as is, without support.**
 
 ## Description
 Messages Manager is a useful application when it comes to working with unit database. All types of messages (data, SMS, command, event) can be retrieved from the database and displayed in a handy tabular view. You only choose a unit and time interval. The application also enables you to delete improper messages from the database.
 
 ## License
-[The MIT License](../master/LICENSE-MIT)
+[The MIT License](LICENSE-MIT)
 
 ## Requirements
- * Browser: Google Chome 20+, Firefox 15+, Safari 5+, IE 9+, Opera 12+
- * Language: русский, English
+ * Browser: a current version of Google Chrome, Firefox, Safari or Edge
+ * Language: en, br, es, fa, pl, ru
  * Components: SDK
- * URL params: Active SID, Host URL, Base URL, Language, Current user
+ * URL params: Active SID, Base URL, Host URL, Language, Current user
 
 ## Quick start
-Apps activation through the management system: http://docs.gurtam.com/en/hosting/cms/apps/apps
-Working with applications in the GPS tracking system: http://docs.gurtam.com/en/hosting/user/apps/apps
+Apps activation through the management system: https://help.wialon.com/en/wialon-hosting/user-guide/management-system/apps  
+Working with applications in the GPS tracking system: https://help.wialon.com/en/wialon-hosting/user-guide/monitoring-system/apps
 
-## Release History
- * v1.1 (July 8, 2013)  
-- initial release
+## Installation
+The repository contains the app in the form it is hosted in. Put the files on a web server and open `index.html` with the URL params listed above, for example
+`index.html?sid=<Active SID>&baseUrl=https://hst-api.wialon.com&user=<Current user>&lang=en`.
 
- * v1.2 (August 6, 2013)  
-- Fixed browser crush while trying to download messages for long interval
-- Added an opportunity to show messages by parts of 500 and 1000
-
- * v1.3 (May 12, 2014) 
-- Added US metrics support
-- Added time mask support
-- Fixed GIS geocoding location address format
-- Fixed altitude & speed printing for no data case
-
- * v1.4 (March 31, 2015) 
-- Added filtration dialog
-- Added sorting by columns
+ * The time interval selector is loaded from `//apps.wialon.com/plugins/`.
